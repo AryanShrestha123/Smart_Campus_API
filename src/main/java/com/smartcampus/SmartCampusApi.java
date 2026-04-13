@@ -36,7 +36,7 @@ public class SmartCampusApi {
         final HttpServer server = startServer();
         LOGGER.info("----------------------------------------");
         LOGGER.info("Smart Campus API started");
-        LOGGER.info("URL: "+ BASE_URI);
+        LOGGER.info("URL: http://0.0.0.0:8080/api/v1");
         LOGGER.info("Press enter to stop the server..");
         LOGGER.info("----------------------------------------");
         System.in.read();
