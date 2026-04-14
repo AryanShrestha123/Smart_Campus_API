@@ -4,6 +4,8 @@
  */
 package com.smartcampus.model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author LEGION
