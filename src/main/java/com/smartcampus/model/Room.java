@@ -32,7 +32,7 @@ public class Room {
     
     public String getName(){return name;}
     
-    public int gatCapacity(){return capacity;}
+    public int getCapacity(){return capacity;}
     
     public List<String> getSensorIds(){return sensorIds;}
     
