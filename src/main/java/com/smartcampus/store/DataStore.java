@@ -39,6 +39,10 @@ public class DataStore {
         return rooms;
     }
     
+    public Room getRoom(String id){
+        return rooms.get(id);
+    }
+    
     public void addRoom(Room room){
         rooms.put(room.getId(), room);
     }
