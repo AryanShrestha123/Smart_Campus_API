@@ -61,6 +61,10 @@ public class DataStore {
         return sensors;
     }
     
+    public Sensor getSensor(String id){
+        return sensors.get(id);
+    }
+    
     public void addSensor(Sensor sensor){
         sensors.put(sensor.getId(), sensor);
         sensorReadings.putIfAbsent(sensor.getId(), new ArrayList<>());
