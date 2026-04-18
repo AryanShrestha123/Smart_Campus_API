@@ -8,6 +8,7 @@ package com.smartcampus.resource;
 import com.smartcampus.model.Room;
 import com.smartcampus.store.DataStore;
 import com.smartcampus.exception.ResourceNotFoundException;
+import com.smartcampus.exception.RoomNotEmptyException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
@@ -98,7 +99,7 @@ public class RoomResource {
     public Response deleteRoom(@PathParam("roomId") String roomId) {
         Room room = store.getRoom(roomId);
         if (room == null) throw new ResourceNotFoundException("Room '" + roomId + "' was not found.");
-        
+        if(!room.getSensorIds().isEmpty()) throw new RoomNotEmptyException(roomId, room.getSensorIds().size());
         store.deleteRoom(roomId);
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("status", 200);
