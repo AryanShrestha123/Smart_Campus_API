@@ -7,6 +7,8 @@ package com.smartcampus.resource;
 import com.smartcampus.model.Sensor;
 import com.smartcampus.model.SensorReading;
 import com.smartcampus.store.DataStore;
+import com.smartcampus.exception.SensorUnavailableException;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -39,7 +41,10 @@ public class SensorReadingResource {
     public Response addReading(SensorReading reading) {
         Sensor sensor = store.getSensor(sensorId);
 
-        
+        // State constraint: only ACTIVE sensors accept readings — 403 if not
+        if (!"active".equalsIgnoreCase(sensor.getStatus())) {
+            throw new SensorUnavailableException(sensorId, sensor.getStatus());
+        }
         if (reading.getId() == null || reading.getId().isBlank()) {
             reading.setId(UUID.randomUUID().toString());
         }
