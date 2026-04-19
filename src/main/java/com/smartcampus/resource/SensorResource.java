@@ -6,6 +6,7 @@ package com.smartcampus.resource;
 
 //Imports
 import com.smartcampus.exception.ResourceNotFoundException;
+import com.smartcampus.exception.LinkedResourceNotFoundException;
 import com.smartcampus.model.Room;
 import com.smartcampus.model.Sensor;
 import com.smartcampus.store.DataStore;
@@ -63,6 +64,14 @@ public class SensorResource {
                     .entity(errorBody(409, "Conflict", "Sensor '" + sensor.getId() + "' already exists.")).build();
         }
         
+        if (sensor.getRoomId() == null || sensor.getRoomId().isBlank()) {
+            throw new LinkedResourceNotFoundException("Field 'roomId' is required.");
+        }
+        if (store.getRoom(sensor.getRoomId()) == null) {
+            throw new LinkedResourceNotFoundException(
+                "The roomId '" + sensor.getRoomId() + "' does not reference an existing room. " +
+                "Create the room first via POST /api/v1/rooms.");
+        }
         
         if (sensor.getStatus() == null || sensor.getStatus().isBlank()) sensor.setStatus("ACTIVE");
         store.addSensor(sensor);
