@@ -22,7 +22,8 @@ public class SmartCampusApi {
     public static final String BASE_URI = "http://0.0.0.0:8080/";
     
     public static HttpServer startServer() {
-        final ResourceConfig rc = new ResourceConfig()
+        final ResourceConfig rc = ResourceConfig
+                .forApplicationClass(SmartCampusApplication.class)
                 .packages(
                         "com.smartcampus.resource",
                         "com.smartcampus.exception",
@@ -36,7 +37,7 @@ public class SmartCampusApi {
         final HttpServer server = startServer();
         LOGGER.info("----------------------------------------");
         LOGGER.info("Smart Campus API started");
-        LOGGER.info("URL: http://0.0.0.0:8080/api/v1");
+        LOGGER.info("URL: http://localhost:8080/api/v1");
         LOGGER.info("Press enter to stop the server..");
         LOGGER.info("----------------------------------------");
         System.in.read();
