@@ -15,6 +15,8 @@ import javax.ws.rs.core.Response;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
@@ -41,7 +43,13 @@ public class SensorReadingResource {
     public Response addReading(SensorReading reading) {
         Sensor sensor = store.getSensor(sensorId);
 
-        // State constraint: only ACTIVE sensors accept readings — 403 if not
+        if (reading == null) {
+        return Response.status(Response.Status.BAD_REQUEST)
+                .entity(errorBody(400, "Bad Request", "Request body is missing. Please provide a JSON body with a 'value' field."))
+                .build();
+        }
+        
+        // State constraint: only ACTIVE sensors accept readings - 403 if not
         if (!"active".equalsIgnoreCase(sensor.getStatus())) {
             throw new SensorUnavailableException(sensorId, sensor.getStatus());
         }
@@ -59,4 +67,13 @@ public class SensorReadingResource {
 
         return Response.status(Response.Status.CREATED).entity(reading).build();
     }   
+    
+    // Helper method to build standardized JSON error responses
+    private Map<String, Object> errorBody(int status, String error, String message) {
+    Map<String, Object> body = new LinkedHashMap<>();
+    body.put("status", status);
+    body.put("error", error);
+    body.put("message", message);
+    return body;
+    }
 }

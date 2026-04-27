@@ -43,6 +43,13 @@ public class RoomResource {
     //POST Method  (to create new room)
     @POST
     public Response createRoom(Room room){
+        //Null body check
+        if (room == null) {
+        return Response.status(Response.Status.BAD_REQUEST)
+                .entity(errorBody(400, "Bad Request", "Request body is missing. Please provide a JSON body."))
+                .build();
+        }
+        
         // Error response for null id
         if(room.getId() == null || room.getId().isBlank()){
             return Response.status(Response.Status.BAD_REQUEST)

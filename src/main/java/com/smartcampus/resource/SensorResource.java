@@ -49,6 +49,13 @@ public class SensorResource {
     
     @POST
     public Response createSensor(Sensor sensor) {
+        //Null body check
+        if (sensor == null) {
+        return Response.status(Response.Status.BAD_REQUEST)
+                .entity(errorBody(400, "Bad Request", "Request body is missing. Please provide a JSON body."))
+                .build();
+        }
+        
         if (sensor.getId() == null || sensor.getId().isBlank()) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(errorBody(400, "Bad Request", "Field 'id' is required.")).build();
