@@ -2,3 +2,4 @@ target/
 *.class
 nbproject/private/
 nb-configuration.xml
+dependency-reduced-pom.xml
