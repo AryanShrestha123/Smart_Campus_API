@@ -19,15 +19,14 @@ import java.util.logging.Logger;
 public class SmartCampusApi {
     
     private static final Logger LOGGER = Logger.getLogger(SmartCampusApi.class.getName());
-    public static final String BASE_URI = "http://0.0.0.0:8080/";
+    public static final String BASE_URI = "http://0.0.0.0:8080/api/v1/";
     
     public static HttpServer startServer() {
-        final ResourceConfig rc = ResourceConfig
-                .forApplicationClass(SmartCampusApplication.class)
+        final ResourceConfig rc = new ResourceConfig()
                 .packages(
-                        "com.smartcampus.resource",
-                        "com.smartcampus.exception",
-                        "com.smartcampus.filter"
+                    "com.smartcampus.resource",
+                    "com.smartcampus.exception",
+                    "com.smartcampus.filter"
                 );
         
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
