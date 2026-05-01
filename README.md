@@ -1,5 +1,122 @@
-# Smart_Campus_API
+# Smart Campus Sensor & Room Management API
 
+A production-quality RESTful API built with **JAX-RS (Jersey 2.41)** and an embedded **Grizzly HTTP server**.
+
+**Module:** 5COSC022W Client-Server Architectures
+
+---
+
+## API Design Overview
+
+The API is versioned at `/api/v1` and models the physical structure of a smart university campus:
+
+- **Rooms** are top-level resources (`/api/v1/rooms`) representing physical spaces
+- **Sensors** are independently addressable resources (`/api/v1/sensors`) linked to rooms via `roomId`
+- **Sensor Readings** are nested sub-resources (`/api/v1/sensors/{sensorId}/readings`) accessed via the Sub-Resource Locator pattern
+
+All data is stored in-memory using `ConcurrentHashMap` and `ArrayList`. No database is used.
+
+---
+
+## Endpoint Map
+
+```
+GET    /api/v1                                    Discovery / HATEOAS metadata
+GET    /api/v1/rooms                              List all rooms
+POST   /api/v1/rooms                              Create a room
+GET    /api/v1/rooms/{roomId}                     Get one room
+PUT    /api/v1/rooms/{roomId}                     Update a room
+DELETE /api/v1/rooms/{roomId}                     Delete room (blocked if sensors exist - 409)
+GET    /api/v1/sensors                            List all sensors
+GET    /api/v1/sensors?type=CO2                   Filter sensors by type (case-insensitive)
+POST   /api/v1/sensors                            Register sensor (validates roomId - 422 if missing)
+GET    /api/v1/sensors/{sensorId}                 Get one sensor
+PUT    /api/v1/sensors/{sensorId}                 Update a sensor
+DELETE /api/v1/sensors/{sensorId}                 Delete a sensor
+GET    /api/v1/sensors/{sensorId}/readings        Get reading history
+POST   /api/v1/sensors/{sensorId}/readings        Add reading (blocked if not ACTIVE - 403)
+```
+
+---
+
+## Technology Stack
+
+- **Language:** Java 11
+- **Framework:** JAX-RS via Jersey 2.41
+- **Server:** Grizzly HTTP Server (embedded)
+- **Build Tool:** Maven
+- **Data Storage:** In-memory ConcurrentHashMap (no database)
+
+---
+
+## How to Build and Run
+
+### Prerequisites
+- JDK 11 or higher
+- Maven 3.6+ (bundled with NetBeans)
+- Internet connection on first build (to download Jersey/Grizzly JARs)
+
+### Option A - NetBeans
+1. Open NetBeans - **File - Open Project** - select this folder
+2. Right-click the project - **Build with Dependencies**
+3. Right-click - **Properties - Run** - Main Class: `com.smartcampus.SmartCampusApi`
+4. Press **F6** to run
+
+### Option B - Command Line
+```bash
+mvn clean package
+java -jar target/smart-campus-api-1.0.0.jar
+```
+
+Server starts at: **http://localhost:8080/api/v1**
+
+To stop: press `ENTER` in the terminal.
+
+---
+
+## Sample curl Commands
+
+### 1. Discovery endpoint
+```bash
+curl -X GET http://localhost:8080/api/v1
+```
+
+### 2. Get all rooms
+```bash
+curl -X GET http://localhost:8080/api/v1/rooms
+```
+
+### 3. Create a new room
+```bash
+curl -X POST http://localhost:8080/api/v1/rooms -H "Content-Type: application/json" -d "{\"id\":\"HALL-01\",\"name\":\"Main Hall\",\"capacity\":200}"
+```
+
+### 4. Get sensors filtered by type
+```bash
+curl -X GET "http://localhost:8080/api/v1/sensors?type=Temperature"
+```
+
+### 5. Add a sensor reading
+```bash
+curl -X POST http://localhost:8080/api/v1/sensors/TEMP-001/readings -H "Content-Type: application/json" -d "{\"value\":24.3}"
+```
+
+### 6. Try to delete a room that has sensors (expect 409 Conflict)
+```bash
+curl -X DELETE http://localhost:8080/api/v1/rooms/LIB-301
+```
+
+### 7. Register a sensor with a non-existent roomId (expect 422)
+```bash
+curl -X POST http://localhost:8080/api/v1/sensors -H "Content-Type: application/json" -d "{\"id\":\"TEMP-999\",\"type\":\"Temperature\",\"roomId\":\"FAKE-999\"}"
+```
+
+### 8. Try to post a reading to a MAINTENANCE sensor (expect 403)
+```bash
+curl -X POST http://localhost:8080/api/v1/sensors/OCC-001/readings -H "Content-Type: application/json" -d "{\"value\":5.0}"
+```
+
+---
 
 ## Conceptual Report - Question Answers
 
