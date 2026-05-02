@@ -59,7 +59,7 @@ public class RoomResource {
         // Error response for empty name
         if(room.getName() == null || room.getName().isBlank()){
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(errorBody(400, "Bad Request", "Field 'name' is requird.")).build();
+                    .entity(errorBody(400, "Bad Request", "Field 'name' is required.")).build();
         }
         
         // Error response for negative capacity

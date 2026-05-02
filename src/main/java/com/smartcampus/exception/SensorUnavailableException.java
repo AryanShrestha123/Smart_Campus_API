@@ -11,6 +11,6 @@ package com.smartcampus.exception;
 public class SensorUnavailableException extends RuntimeException{
     public SensorUnavailableException(String sensorId, String status){
         super("Sensor '"+sensorId+"' is in '"+ status+"'state. "+
-                "Only AACTIVE sensors accept new readings. Update statis via PUT /api/v1/sensors/"+sensorId);
+                "Only ACTIVE sensors accept new readings. Update statis via PUT /api/v1/sensors/"+sensorId);
     }
 }
