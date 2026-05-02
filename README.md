@@ -56,6 +56,12 @@ POST   /api/v1/sensors/{sensorId}/readings        Add reading (blocked if not AC
 - Maven 3.6+ (bundled with NetBeans)
 - Internet connection on first build (to download Jersey/Grizzly JARs)
 
+### Clone the Repository
+```bash
+git clone https://github.com/AryanShrestha123/Smart_Campus_API.git
+cd smart-campus-api
+```
+
 ### Option A - NetBeans
 1. Open NetBeans - **File - Open Project** - select this folder
 2. Right-click the project - **Build with Dependencies**
